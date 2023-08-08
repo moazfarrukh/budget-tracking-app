@@ -1,0 +1,42 @@
+{
+  "name": "budget-tracking-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "node dist/server.js",
+    "compile": "tsc && node ./dist/server.js",
+    "dev": "nodemon -e ts  --exec \"npm run compile\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/passport-local-mongoose": "^6.1.1",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "debug": "^4.3.4",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.4.2",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^8.0.0",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/debug": "^4.1.8",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/node": "^20.4.8",
+    "@types/passport-jwt": "^3.0.9",
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.1"
+  }
+}
