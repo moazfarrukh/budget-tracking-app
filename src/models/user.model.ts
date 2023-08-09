@@ -1,17 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import passportLocalMongoose from 'passport-local-mongoose';
-
-interface ISession {
-  refreshToken: string
-}
-
-
-interface IUser {
-  firstName: string
-  lastName: string,
-  budget_limit: number,
-  refreshToken: ISession[]
-}
+import {ISession,IUser} from '../types/user'
 
 const sessionSchema = new Schema<ISession>({
   refreshToken: {
@@ -35,6 +24,7 @@ const userSchema = new Schema<IUser>({
   ,
   refreshToken: {
     type: [sessionSchema],
+    default:[]
   },
 });
 

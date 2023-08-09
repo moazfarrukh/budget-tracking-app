@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import userModel from '../models/user.model';
 import { COOKIE_OPTIONS, getRefreshToken, getToken } from '../utils/authentication';
 import jsonwebtoken, { JwtPayload, Secret } from "jsonwebtoken";
+import { ReqUser } from '../types/user';
 import * as dotenv from 'dotenv';
 
 dotenv.config()
@@ -9,10 +10,6 @@ dotenv.config()
 const User = userModel;
 
 const REFRESH_TOKEN_SECRET: Secret = process.env.REFRESH_TOKEN_SECRET as string;
-
-interface ReqUser {
-    _id: string,
-}
 
 
 
@@ -26,7 +23,15 @@ export const UserSignUp = (req: Request, res: Response, next: NextFunction) => {
             name: "No First Name Error",
             message: "The first name is required",
         })
-    } else {
+    }
+    else if (!req.body.budget_limit) {
+        res.statusCode = 400;
+        res.send({
+            name: "No Budget limit Error",
+            message: "The budget Limit is required",
+        })
+    }
+    else {
         User.register(new User(req.body), req.body.password, (err, user) => {
             if (err) {
                 res.statusCode = 500
@@ -35,6 +40,8 @@ export const UserSignUp = (req: Request, res: Response, next: NextFunction) => {
             } else {
                 const token = getToken({ _id: user._id })
                 const refreshToken = getRefreshToken({ _id: user._id })
+                user.refreshToken.push({ refreshToken })
+
                 user.save(req.body).then(() => {
                     res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS)
                     res.send({ success: true, token });

@@ -1,13 +1,10 @@
 import jsonwebtoken, { Secret, SignOptions } from "jsonwebtoken";
 import { CookieOptions } from "express";
 import passport from "passport";
-import { createSemanticDiagnosticsBuilderProgram } from "typescript";
 import * as dotenv from 'dotenv'
+import { payload } from "../types/user";
 
 dotenv.config();
-interface payload {
-    _id: string;
-}
 
 const SECRET_KEY: Secret = process.env.JWT_SECRET as string
 

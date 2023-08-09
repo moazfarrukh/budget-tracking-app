@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import passport from 'passport';
 import cookieParser from 'cookie-parser';'cookie-parser'
 import cors from 'cors'
+import budgetRouter from './src/routes/budget';
+import { verifyUser } from './src/utils/authentication';
 
 require("./src/stratergies/LocalStrategy")
 require("./src/stratergies/JwtStratergy")
@@ -14,7 +16,7 @@ require("./src/utils/authentication")
 
 
 // connect mongodb
-const conn_string: string = "mongodb://127.0.0.1:27017/users"
+const conn_string: string = "mongodb://127.0.0.1:27017/budget-app"
 const connect = mongoose.connect(conn_string);
 connect.then(db => console.log("connected to db")).catch(err => {
   console.log(err);
@@ -40,7 +42,7 @@ app.use(passport.initialize())
 
 // setup routes
 app.use("/user", userRouter);
-
+app.use("/budget",verifyUser,budgetRouter)
 
 // add list to por
 app.listen(port, () => {
