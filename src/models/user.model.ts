@@ -8,18 +8,18 @@ interface ISession {
 
 interface IUser {
   firstName: string
-  lastName: string
-  authStrategy: string
+  lastName: string,
+  budget_limit: number,
   refreshToken: ISession[]
 }
 
-const Session = new Schema<ISession>({
+const sessionSchema = new Schema<ISession>({
   refreshToken: {
     type: String, default: ""
   }
 })
 
-const User = new Schema<IUser>({
+const userSchema = new Schema<IUser>({
   firstName: {
     type: String,
     default: "",
@@ -28,16 +28,17 @@ const User = new Schema<IUser>({
     type: String,
     default: "",
   },
-  authStrategy: {
-    type: String,
-    default: "local",
-  },
+  budget_limit: {
+    type: Number,
+    default: 0,
+  }
+  ,
   refreshToken: {
-    type: [Session],
+    type: [sessionSchema],
   },
 });
 
-User.set("toJSON", {
+userSchema.set("toJSON", {
   transform: function (doc, ret, options) {
     delete ret.refreshToken
     return ret
@@ -45,10 +46,10 @@ User.set("toJSON", {
 });
 
 
-User.plugin(passportLocalMongoose)
+userSchema.plugin(passportLocalMongoose,{ usernameField : 'email' })
 
 
 
 
 
-export default mongoose.model("User", User);
+export default mongoose.model("User", userSchema);

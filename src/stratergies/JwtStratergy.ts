@@ -1,24 +1,30 @@
-import { ExtractJwt, Strategy, StrategyOptions,VerifiedCallback } from "passport-jwt";
+import { ExtractJwt, Strategy as JwtStratergy, StrategyOptions, VerifiedCallback } from "passport-jwt";
 import userModel from "../models/user.model";
 import passport from "passport";
+import { Secret } from "jsonwebtoken";
+import * as dotenv from 'dotenv'
+// set environment variables from .env file
+dotenv.config()
+
+console.log(process.env.JWT_SECRET)
 
 const options: StrategyOptions =
 {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: "jdhdhd-kjfadsfsahrerj-uurhr-jjge"
+    secretOrKey: process.env.JWT_SECRET as string
 }
 passport.use(
-    new Strategy(options,(payload,done:VerifiedCallback)=>{
-        userModel.findOne({_id:payload._id}, (err:any,user:any)=>{
-            if(err){
-                return done(err,false)
+    new JwtStratergy(options, (payload, done: VerifiedCallback) => {
+        userModel.findById(payload._id).then((user: any) => {
+            if (user) {
+                return done(null, user)
             }
-            if (user){
-                return done(null,user)
-            }else{ 
-                return done(null,false)
-            }
+        }).catch((err: any) => {
+            return done(err, false, {
+                message: 'Token not matched.'
+            })
         })
+
     })
-    
+
 )

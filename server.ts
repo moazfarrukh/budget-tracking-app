@@ -1,16 +1,18 @@
 import express, { Express } from 'express';
-import dotenv from 'dotenv';
-import userRouter from './src/routes/users';
+import userRouter from './src/routes/user';
 import mongoose from "mongoose";
 import passport from 'passport';
-require("./src/stratergies/LocalStrategy")
-require("./src/stratergies/JwtStratergy")
-
+import cookieParser from 'cookie-parser';'cookie-parser'
 import cors from 'cors'
 
-// set environment variables from .env file
-dotenv.config();
-console.log(process.env)
+require("./src/stratergies/LocalStrategy")
+require("./src/stratergies/JwtStratergy")
+require("./src/utils/authentication")
+
+
+
+
+
 // connect mongodb
 const conn_string: string = "mongodb://127.0.0.1:27017/users"
 const connect = mongoose.connect(conn_string);
@@ -32,11 +34,11 @@ const options: cors.CorsOptions = {
   origin: allowedOrigins
 };
 app.use(cors(options));
+app.use(cookieParser("jhdshhds884hfhhs-euhdhjd"))
 
-
+app.use(passport.initialize())
 
 // setup routes
-app.use(passport.initialize())
 app.use("/user", userRouter);
 
 

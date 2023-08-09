@@ -2,13 +2,14 @@ import jsonwebtoken, { Secret, SignOptions } from "jsonwebtoken";
 import { CookieOptions } from "express";
 import passport from "passport";
 
+
 interface payload {
     _id: string;
 }
 
-const SECRET_KEY: Secret = process.env.JWT_SECRET as string
-const REFRESH_TOKEN_SECRET: Secret = process.env.REFRESH_TOKEN_SECRET as string
+const SECRET_KEY: Secret = "MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBfva0PN0zHGjaLFKqhBjYY"
 
+const REFRESH_TOKEN_SECRET: Secret = "MIIEogIBAAKCAQBfva0PN0zHGjaLFKqhBjYYlErIEioasP/NGHQ4y62mlSuDRePz-jdjd774"
 
 export const COOKIE_OPTIONS: CookieOptions = {
     httpOnly: true,
@@ -24,8 +25,8 @@ export const getToken = (user: payload) => {
 
 export const getRefreshToken = (user: payload) => {
     return jsonwebtoken.sign(user, REFRESH_TOKEN_SECRET, {
-        expiresIn: 1000 * 60 * 60 * 24 * 30,
+        expiresIn: 1000 * 60 * 60 * 24 * 30
     } as SignOptions,)
 }
 
-export const verifyUser = passport.authenticate('jwt', { session: false })
+export const verifyUser = passport.authenticate('jwt', { session: false} )
