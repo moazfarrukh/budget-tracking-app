@@ -1,12 +1,9 @@
 import { ExtractJwt, Strategy as JwtStratergy, StrategyOptions, VerifiedCallback } from "passport-jwt";
 import userModel from "../models/user.model";
 import passport from "passport";
-import { Secret } from "jsonwebtoken";
 import * as dotenv from 'dotenv'
 // set environment variables from .env file
 dotenv.config()
-
-console.log(process.env.JWT_SECRET)
 
 const options: StrategyOptions =
 {

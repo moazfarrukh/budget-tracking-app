@@ -2,9 +2,13 @@ import { Response, Request, NextFunction } from 'express';
 import userModel from '../models/user.model';
 import { COOKIE_OPTIONS, getRefreshToken, getToken } from '../utils/authentication';
 import jsonwebtoken, { JwtPayload, Secret } from "jsonwebtoken";
+import * as dotenv from 'dotenv';
+
+dotenv.config()
 
 const User = userModel;
-const REFRESH_TOKEN_SECRET: Secret = "MIIEogIBAAKCAQBfva0PN0zHGjaLFKqhBjYYlErIEioasP/NGHQ4y62mlSuDRePz-jdjd774"
+
+const REFRESH_TOKEN_SECRET: Secret = process.env.REFRESH_TOKEN_SECRET as string;
 
 interface ReqUser {
     _id: string,
@@ -130,7 +134,6 @@ export const userRefreshToken = (req: Request, res: Response, next: NextFunction
 
 
 export const userLogOut = (req: Request, res: Response, next: NextFunction) => {
-    console.log("here");
     const refreshToken = req.signedCookies.refreshToken;
     const reqUser = req.user as ReqUser;
     if (req.user !== undefined) {

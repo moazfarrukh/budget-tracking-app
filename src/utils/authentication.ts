@@ -1,15 +1,17 @@
 import jsonwebtoken, { Secret, SignOptions } from "jsonwebtoken";
 import { CookieOptions } from "express";
 import passport from "passport";
+import { createSemanticDiagnosticsBuilderProgram } from "typescript";
+import * as dotenv from 'dotenv'
 
-
+dotenv.config();
 interface payload {
     _id: string;
 }
 
-const SECRET_KEY: Secret = "MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBfva0PN0zHGjaLFKqhBjYY"
+const SECRET_KEY: Secret = process.env.JWT_SECRET as string
 
-const REFRESH_TOKEN_SECRET: Secret = "MIIEogIBAAKCAQBfva0PN0zHGjaLFKqhBjYYlErIEioasP/NGHQ4y62mlSuDRePz-jdjd774"
+const REFRESH_TOKEN_SECRET: Secret = process.env.REFRESH_TOKEN_SECRET as string
 
 export const COOKIE_OPTIONS: CookieOptions = {
     httpOnly: true,
@@ -29,4 +31,4 @@ export const getRefreshToken = (user: payload) => {
     } as SignOptions,)
 }
 
-export const verifyUser = passport.authenticate('jwt', { session: false} )
+export const verifyUser = passport.authenticate('jwt', {session: false})
