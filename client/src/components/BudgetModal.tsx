@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   IconButton,
   Box,
@@ -7,11 +7,17 @@ import {
   Typography,
   Divider,
 } from "@mui/material";
-
 import CloseIcon from "@mui/icons-material/Close";
 import TextInput from "./TextInput";
 import NumberInput from "./NumberInput";
 import DateInput from "./DateInput";
+import dayjs, { Dayjs } from "dayjs";
+import { getBudgetData, postBudgetData } from "../utils/budgetFetch";
+import userContext from "../contexts/userContext";
+import { userContextType } from "../types/User";
+import { BudgetData, budgetContextType } from "../types/Budget";
+import budgetContext from "../contexts/budgetContext";
+
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -31,11 +37,32 @@ interface ChildModalProps {
 }
 
 function ChildModal({ open, setOpen }: ChildModalProps) {
-  const [TName, setTName] = useState<string>("");
+  const [tName, setTName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
+
+  // stores the current time by default
+  const [tDate, setTDate] = useState<Dayjs | null>(dayjs());
+  const { userData } = useContext(userContext) as userContextType;
+  const { budgetDataList, setBudgetDataList } = useContext(
+    budgetContext
+  ) as budgetContextType;
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handlebudgetSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const success = await postBudgetData(userData, {
+      transaction_name: tName,
+      transaction_date: tDate?.toString(),
+      price: price,
+    } as BudgetData);
+
+    if (success) {
+      getBudgetData(userData, setBudgetDataList);
+    } else {
+    }
   };
 
   return (
@@ -62,8 +89,8 @@ function ChildModal({ open, setOpen }: ChildModalProps) {
           />{" "}
           <TextInput label="Name" name="name" setFieldState={setTName} />
           <NumberInput label="Price" name="price" setFieldState={setPrice} />
-          <DateInput label="Date" />
-          <form onSubmit={() => {}} noValidate>
+          <DateInput label="Date" setDate={setTDate} />
+          <form onSubmit={handlebudgetSubmit} noValidate>
             <Button variant="contained" fullWidth type="submit">
               Submit
             </Button>

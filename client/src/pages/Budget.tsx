@@ -1,5 +1,5 @@
 import userContext from "../contexts/userContext";
-import { userContextType } from "../types/userContext";
+import { userContextType } from "../types/User";
 import { useContext, useEffect, useState } from "react";
 import {
   Box,
@@ -14,40 +14,27 @@ import {
   Button,
   TableHead,
 } from "@mui/material";
-import { BudgetColumn, BudgetData } from "../types/Budget";
+import { BudgetColumn, BudgetData, budgetContextType } from "../types/Budget";
 import { DateField } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
 import { convertDateFormat } from "../utils/dateFormat";
 import ChildModal from "../components/BudgetModal";
+import { getBudgetData } from "../utils/budgetFetch";
+import budgetContext from "../contexts/budgetContext";
+
 function Budget() {
   const { userData } = useContext(userContext) as userContextType;
   const [budgetDataList, setBudgetDataList] = useState<BudgetData[]>([]);
-  useEffect(() => {
-    fetch("http://localhost:8000/budget", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userData.token}`,
-      },
-    })
-      .then(async (res: Response) => {
-        if (!res.ok) {
-          console.log("error");
-        } else {
-          const data = await res.json();
-          setBudgetDataList(data.budget_list as [BudgetData]);
-        }
-      })
-      .catch((err) => {
-        console.log("catch err", err);
-      });
-  }, [setBudgetDataList, userData]);
-
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [open, setOpen] = useState<boolean>(false);
+  const value = { budgetDataList, setBudgetDataList } as budgetContextType;
+
+  useEffect(() => {
+    getBudgetData(userData, setBudgetDataList);
+  }, [setBudgetDataList, userData]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -79,7 +66,9 @@ function Budget() {
       alignItems="center"
       justifyContent="center"
     >
-      <ChildModal open={open} setOpen={setOpen} />
+      <budgetContext.Provider value={value}>
+        <ChildModal open={open} setOpen={setOpen} />
+      </budgetContext.Provider>
       <Card variant="outlined" sx={{ padding: "26px" }}>
         <Box display="flex" justifyContent="space-between">
           <Box display="flex" gap="10px">

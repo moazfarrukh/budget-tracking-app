@@ -2,7 +2,7 @@ import { Box, Button, Container, Grid, Link, Typography } from "@mui/material";
 import TextInput from "../components/TextInput";
 import { useState, useContext } from "react";
 import userContext from "../contexts/userContext";
-import { userContextType } from "../types/userContext";
+import { userContextType } from "../types/User";
 import { useNavigate } from "react-router-dom";
 
 function LogIn() {

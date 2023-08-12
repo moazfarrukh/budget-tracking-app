@@ -13,7 +13,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NumberInput from "../components/NumberInput";
 import userContext from "../contexts/userContext";
-import { userContextType } from "../types/userContext";
+import { userContextType } from "../types/User";
 import { Link as NavLink } from "react-router-dom";
 function SignUp() {
   const [firstName, setFirstName] = useState<string>("");
