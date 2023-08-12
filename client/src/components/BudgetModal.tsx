@@ -17,6 +17,7 @@ import userContext from "../contexts/userContext";
 import { userContextType } from "../types/User";
 import { BudgetData, budgetContextType } from "../types/Budget";
 import budgetContext from "../contexts/budgetContext";
+import { DividerStyle } from "../styles/BudgetModel";
 
 const style = {
   position: "absolute" as "absolute",
@@ -43,9 +44,7 @@ function ChildModal({ open, setOpen }: ChildModalProps) {
   // stores the current time by default
   const [tDate, setTDate] = useState<Dayjs | null>(dayjs());
   const { userData } = useContext(userContext) as userContextType;
-  const { budgetDataList, setBudgetDataList } = useContext(
-    budgetContext
-  ) as budgetContextType;
+  const { setBudgetDataList } = useContext(budgetContext) as budgetContextType;
 
   const handleClose = () => {
     setOpen(false);
@@ -80,13 +79,7 @@ function ChildModal({ open, setOpen }: ChildModalProps) {
               <CloseIcon />
             </IconButton>
           </Box>
-          <Divider
-            style={{
-              backgroundColor: "#ececec",
-              width: "100%",
-              marginBottom: "20px",
-            }}
-          />{" "}
+          <Divider style={DividerStyle} />{" "}
           <TextInput label="Name" name="name" setFieldState={setTName} />
           <NumberInput label="Price" name="price" setFieldState={setPrice} />
           <DateInput label="Date" setDate={setTDate} />

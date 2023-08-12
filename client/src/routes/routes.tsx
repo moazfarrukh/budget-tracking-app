@@ -14,10 +14,6 @@ export const AppRoutes = () => {
       element: <LogIn />,
     },
     {
-      path: "/login",
-      element: <LogIn />,
-    },
-    {
       path: "/budget",
       element: <Budget />,
     },
