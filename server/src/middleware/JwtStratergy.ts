@@ -13,10 +13,8 @@ const options: StrategyOptions =
 passport.use(
     new JwtStratergy(options, (payload, done: VerifiedCallback) => {
         userModel.findById(payload._id).then((user: any) => {
-            if (user) {
                 return done(null, user)
-            }
-        }).catch((err: any) => {
+        }).catch((err: Error) => {
             return done(err, false, {
                 message: 'Token not matched.'
             })

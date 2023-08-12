@@ -1,5 +1,5 @@
 import express, { Response, Request, NextFunction } from 'express';
-import { verifyUser } from '../utils/authentication';
+import { verifyUser } from '../middleware/authentication';
 import { budgetAdd, budgetGet } from '../controllers/budget-controller';
 
 const budgetRouter = express.Router();

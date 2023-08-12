@@ -5,13 +5,10 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';'cookie-parser'
 import cors from 'cors'
 import budgetRouter from './src/routes/budget';
-import { verifyUser } from './src/utils/authentication';
 
-require("./src/stratergies/LocalStrategy")
-require("./src/stratergies/JwtStratergy")
-require("./src/utils/authentication")
-
-
+require("./src/middleware/JwtStratergy")
+require("./src/middleware/LocalStrategy")
+require("./src/middleware/authentication")
 
 
 
@@ -25,24 +22,24 @@ connect.then(db => console.log("connected to db")).catch(err => {
 
 //express server
 const app: Express = express();
-const port: number = 3000;
+const port: number =8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
 // setup cors
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ['*'];
 const options: cors.CorsOptions = {
-  origin: allowedOrigins
+  origin: '*'
 };
 app.use(cors(options));
-app.use(cookieParser("jhdshhds884hfhhs-euhdhjd"))
+app.use(cookieParser(process.env.COOKIE_SECRET as string))
 
 app.use(passport.initialize())
 
 // setup routes
 app.use("/user", userRouter);
-app.use("/budget",verifyUser,budgetRouter)
+app.use("/budget",budgetRouter)
 
 // add list to por
 app.listen(port, () => {
