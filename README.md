@@ -3,7 +3,8 @@
 
 ### Client
 Change directory to the client folder
-```cd client
+```
+cd client
 ```
 Run npm install 
 ```
@@ -15,7 +16,8 @@ npm run start
 ```
 ### Server
 Change directory to the server folder
-```cd server
+```
+cd server
 ```
 Run npm install 
 ```
