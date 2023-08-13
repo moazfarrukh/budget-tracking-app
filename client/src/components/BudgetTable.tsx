@@ -6,19 +6,28 @@ import {
   TableHead,
   TableBody,
   TablePagination,
-  IconButton,
-  Tab,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { TableStyle } from "../styles/Budget";
-import { BudgetColumn, BudgetData, budgetContextType } from "../types/Budget";
-import { convertDateFormat } from "../utils/dateFormat";
+import {
+  BudgetColumn,
+  BudgetData,
+  budgetContextType,
+  filterContextType,
+} from "../types/Budget";
+import { convertDateFormat, dateToString } from "../utils/dateFormat";
 import budgetContext from "../contexts/budgetContext";
 import ActionButton from "./ActionButton";
+import filterContext from "../contexts/filterContext";
+import dayjs, { Dayjs } from "dayjs";
 function BudgetTable() {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const { budgetDataList } = useContext(budgetContext) as budgetContextType;
+  const { filterToggle, filterDate } = useContext(
+    filterContext
+  ) as filterContextType;
+
   const columns: BudgetColumn[] = [
     { id: "transaction_name", label: "Name", align: "center", minWidth: 100 },
     { id: "price", label: "Price", align: "center", minWidth: 100 },
@@ -46,7 +55,16 @@ function BudgetTable() {
     </TableCell>
   ));
 
-  const displayTableData = budgetDataList
+  let tableData = filterToggle
+    ? budgetDataList.filter((budgetData) => {
+        return (
+          dateToString(new Date(budgetData.transaction_date)) ===
+          dateToString(filterDate)
+        );
+      })
+    : budgetDataList;
+
+  const displayTableData = tableData
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     .map((row) => {
       return (
@@ -71,7 +89,6 @@ function BudgetTable() {
 
   return (
     <>
-    
       <TableContainer sx={TableStyle}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

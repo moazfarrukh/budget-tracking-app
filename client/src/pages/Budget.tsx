@@ -16,12 +16,16 @@ import { addButtonStyle } from "../styles/Budget";
 import BudgetTable from "../components/BudgetTable";
 import EditBudgetModal from "../components/EditBudgetModal";
 import selectedBudgetContext from "../contexts/selectedBudgetContext";
+import filterContext from "../contexts/filterContext";
+import dayjs, { Dayjs } from "dayjs";
 
 function Budget() {
   const { userData } = useContext(userContext) as userContextType;
   const [budgetDataList, setBudgetDataList] = useState<BudgetData[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [filterDate, setFilterDate] = useState<Date>(new Date());
+  const [filterToggle, setFilterToggle] = useState<boolean>(false);
   const intialBudgetData: BudgetData = {
     user: "",
     transaction_name: "",
@@ -42,6 +46,13 @@ function Budget() {
     setBudgetDataList,
   } as budgetContextType;
 
+  const filterValue = {
+    filterDate,
+    setFilterDate,
+    filterToggle,
+    setFilterToggle,
+  };
+
   useEffect(() => {
     getBudgetData(userData, setBudgetDataList);
   }, [setBudgetDataList, userData]);
@@ -53,28 +64,30 @@ function Budget() {
   return (
     <budgetContext.Provider value={budgetDataListValue}>
       <selectedBudgetContext.Provider value={selectedBudgetValue}>
-        <Box
-          minHeight="100vh"
-          width="100%"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <EditBudgetModal setOpen={setEditOpen} open={editOpen} />
+        <filterContext.Provider value={filterValue}>
+          <Box
+            minHeight="100vh"
+            width="100%"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <EditBudgetModal setOpen={setEditOpen} open={editOpen} />
 
-          <AddBudgetModal open={open} setOpen={setOpen} />
+            <AddBudgetModal open={open} setOpen={setOpen} />
 
-          <Card variant="outlined" sx={{ padding: "26px" }}>
-            <Box display="flex" justifyContent="space-between">
-              <FilterByDate />
-              <Button type="submit" sx={addButtonStyle} onClick={handleOpen}>
-                Add Budget
-              </Button>
-            </Box>
-            <BudgetTable />
-          </Card>
-        </Box>
+            <Card variant="outlined" sx={{ padding: "26px" }}>
+              <Box display="flex" justifyContent="space-between">
+                <FilterByDate />
+                <Button type="submit" sx={addButtonStyle} onClick={handleOpen}>
+                  Add Budget
+                </Button>
+              </Box>
+              <BudgetTable />
+            </Card>
+          </Box>
+        </filterContext.Provider>{" "}
       </selectedBudgetContext.Provider>
     </budgetContext.Provider>
   );

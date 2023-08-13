@@ -6,11 +6,16 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 
 interface DateInputProps {
   label: string;
-  setDate: (date: Dayjs | null) => void;
+  setDate: (date: Date) => void;
   defaultValue?: Dayjs | null;
 }
 
 function DateInput({ label, setDate, defaultValue }: DateInputProps) {
+  const handleDateChange = (TValue: Dayjs | null) => {
+    if (TValue !== null) {
+      setDate(TValue.toDate());
+    }
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateField
@@ -20,7 +25,7 @@ function DateInput({ label, setDate, defaultValue }: DateInputProps) {
         defaultValue={
           typeof defaultValue === "undefined" ? dayjs() : defaultValue
         }
-        onChange={setDate}
+        onChange={handleDateChange}
       />
     </LocalizationProvider>
   );

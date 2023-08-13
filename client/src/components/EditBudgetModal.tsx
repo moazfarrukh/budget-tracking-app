@@ -38,12 +38,12 @@ function EditBudgetModal({ open, setOpen }: BudgetModalProps) {
   const [tName, setTName] = useState<string>("");
   const [price, setPrice] = useState<number>();
   // stores the current time by default
-  const [tDate, setTDate] = useState<Dayjs | null>(dayjs());
+  const [tDate, setTDate] = useState<Date>(new Date());
   const { userData } = useContext(userContext) as userContextType;
   const { setBudgetDataList } = useContext(budgetContext) as budgetContextType;
 
   useEffect(() => {
-    setTDate(dayjs(selectedBudget.transaction_date));
+    setTDate(new Date(selectedBudget.transaction_date));
     setPrice(selectedBudget.price);
     setTName(selectedBudget.transaction_name);
   }, [selectedBudget, setPrice, setTDate, setTName]);

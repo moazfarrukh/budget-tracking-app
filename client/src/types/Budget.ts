@@ -1,3 +1,4 @@
+import { Dayjs } from "dayjs"
 export interface BudgetColumn {
     id: string,
     label: string,
@@ -20,4 +21,12 @@ export interface SelectedBudgetContextType {
     selectedBudget: BudgetData,
     setSelectedBudget: (BudgetDataList: BudgetData) => void
     setEditOpen: (editOpen: boolean) => void
+}
+
+export interface filterContextType {
+    filterDate: Date,
+    setFilterDate: (date: Date) => void
+    filterToggle: boolean
+    setFilterToggle: (value: boolean) => void
+
 }

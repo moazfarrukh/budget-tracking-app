@@ -30,7 +30,7 @@ function AddBudgetModal({ open, setOpen }: BudgetModalProps) {
   const [price, setPrice] = useState<number>(0);
 
   // stores the current time by default
-  const [tDate, setTDate] = useState<Dayjs | null>(dayjs());
+  const [tDate, setTDate] = useState<Date>(new Date());
   const { userData } = useContext(userContext) as userContextType;
   const { setBudgetDataList } = useContext(budgetContext) as budgetContextType;
 
