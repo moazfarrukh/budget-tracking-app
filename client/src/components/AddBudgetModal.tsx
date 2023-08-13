@@ -17,27 +17,15 @@ import userContext from "../contexts/userContext";
 import { userContextType } from "../types/User";
 import { BudgetData, budgetContextType } from "../types/Budget";
 import budgetContext from "../contexts/budgetContext";
-import { DividerStyle } from "../styles/BudgetModel";
+import { DividerStyle, BudgetModalStyle } from "../styles/BudgetModal";
+import { addButtonStyle } from "../styles/Budget";
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
-
-interface ChildModalProps {
+interface BudgetModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-function ChildModal({ open, setOpen }: ChildModalProps) {
+function AddBudgetModal({ open, setOpen }: BudgetModalProps) {
   const [tName, setTName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
 
@@ -59,6 +47,7 @@ function ChildModal({ open, setOpen }: ChildModalProps) {
     } as BudgetData);
 
     if (success) {
+      handleClose();
       getBudgetData(userData, setBudgetDataList);
     } else {
     }
@@ -66,32 +55,32 @@ function ChildModal({ open, setOpen }: ChildModalProps) {
 
   return (
     <>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="Add budget"
-        aria-describedby="Add budget"
-      >
-        <Box sx={{ ...style }}>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={{ ...BudgetModalStyle }}>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6">Add Budget</Typography>
             <IconButton onClick={handleClose} aria-label="close">
               <CloseIcon />
             </IconButton>
           </Box>
-          <Divider style={DividerStyle} />{" "}
+          <Divider style={DividerStyle} />
           <TextInput label="Name" name="name" setFieldState={setTName} />
           <NumberInput label="Price" name="price" setFieldState={setPrice} />
           <DateInput label="Date" setDate={setTDate} />
           <form onSubmit={handlebudgetSubmit} noValidate>
-            <Button variant="contained" fullWidth type="submit">
+            <Button
+              variant="contained"
+              sx={addButtonStyle}
+              fullWidth
+              type="submit"
+            >
               Submit
             </Button>
-          </form>{" "}
+          </form>
         </Box>
       </Modal>
     </>
   );
 }
 
-export default ChildModal;
+export default AddBudgetModal;

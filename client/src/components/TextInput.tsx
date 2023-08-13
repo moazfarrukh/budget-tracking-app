@@ -7,6 +7,7 @@ interface TextInputProps {
   setFieldState: (value: string) => void;
   type?: string;
   required?: boolean;
+  defaultValue?: string;
 }
 
 function TextInput({
@@ -15,6 +16,7 @@ function TextInput({
   type,
   required,
   setFieldState,
+  defaultValue,
 }: TextInputProps) {
   return (
     <Grid
@@ -33,6 +35,7 @@ function TextInput({
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setFieldState(e.target.value);
         }}
+        defaultValue={defaultValue}
       />
     </Grid>
   );

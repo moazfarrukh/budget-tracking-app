@@ -15,3 +15,9 @@ export interface budgetContextType {
     budgetDataList: BudgetData[],
     setBudgetDataList: (BudgetDataList: BudgetData[]) => void
 }
+
+export interface SelectedBudgetContextType {
+    selectedBudget: BudgetData,
+    setSelectedBudget: (BudgetDataList: BudgetData) => void
+    setEditOpen: (editOpen: boolean) => void
+}

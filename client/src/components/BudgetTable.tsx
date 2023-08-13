@@ -6,6 +6,7 @@ import {
   TableHead,
   TableBody,
   TablePagination,
+  IconButton,
   Tab,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
@@ -13,7 +14,7 @@ import { TableStyle } from "../styles/Budget";
 import { BudgetColumn, BudgetData, budgetContextType } from "../types/Budget";
 import { convertDateFormat } from "../utils/dateFormat";
 import budgetContext from "../contexts/budgetContext";
-
+import ActionButton from "./ActionButton";
 function BudgetTable() {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
@@ -61,12 +62,16 @@ function BudgetTable() {
               </TableCell>
             );
           })}
+          <TableCell key={"action"} align={"center"}>
+            <ActionButton object_id={row._id} />
+          </TableCell>
         </TableRow>
       );
     });
 
   return (
     <>
+    
       <TableContainer sx={TableStyle}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

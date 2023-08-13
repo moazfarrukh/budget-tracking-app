@@ -23,6 +23,23 @@ export const getBudgetData = async (
         return false;
     }
 };
+export const deleteBudgetData = async (userData: IUserData, object_id: string): Promise<boolean> => {
+    const response = await fetch("http://localhost:8000/budget", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+        },
+        body: JSON.stringify({ object_id: object_id }),
+    });
+    if (response.ok) {
+        console.log("success");
+        return true;
+    } else {
+        console.log("error");
+        return false;
+    }
+}
 
 export const postBudgetData = async (
     userData: IUserData,
@@ -35,6 +52,28 @@ export const postBudgetData = async (
             Authorization: `Bearer ${userData.token}`,
         },
         body: JSON.stringify(budgetData),
+    });
+    if (response.ok) {
+        console.log("success");
+        return true;
+    } else {
+        console.log("error");
+        return false;
+    }
+};
+
+
+export const updateBudgetData = async (
+    userData: IUserData,
+    budgetData: BudgetData
+): Promise<boolean> => {
+    const response = await fetch("http://localhost:8000/budget", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+        },
+        body: JSON.stringify({ ...budgetData, object_id: budgetData._id }),
     });
     if (response.ok) {
         console.log("success");

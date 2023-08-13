@@ -1,14 +1,16 @@
 import mongoose, { Schema } from "mongoose"
 
 interface IBudget {
+    _id: Schema.Types.ObjectId,
     transaction_name: string,
     transaction_date: Date,
     price: number
-    user:Schema.Types.ObjectId
-    
+    user: Schema.Types.ObjectId
+
 }
 
 const budgetSchema = new Schema<IBudget>({
+    _id: Schema.Types.ObjectId,
     transaction_name: {
         type: String,
         default: ""
@@ -21,12 +23,12 @@ const budgetSchema = new Schema<IBudget>({
         type: Number,
         default: 0,
     },
-    user:{
-        type:Schema.Types.ObjectId,
-        ref:"User"
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     }
 })
 
 
-const Budget = mongoose.model("Budget",budgetSchema);
+const Budget = mongoose.model("Budget", budgetSchema);
 export default Budget;
