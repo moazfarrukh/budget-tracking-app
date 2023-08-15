@@ -30,3 +30,8 @@ export interface filterContextType {
     setFilterToggle: (value: boolean) => void
 
 }
+
+export interface budgetAnalytics {
+    date: string,
+    price: number
+}

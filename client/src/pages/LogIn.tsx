@@ -26,7 +26,9 @@ function LogIn() {
           console.log(await res.json());
         } else {
           const data = await res.json();
+          localStorage.setItem("token", data.token);
           setUserData({ token: data.token });
+          localStorage.getItem("token");
           navigate("/budget");
         }
       })
@@ -64,14 +66,25 @@ function LogIn() {
               type="password"
               setFieldState={setPassword}
             />
-            <Button type="submit" fullWidth variant="contained" color="primary">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                height: 40,
+                backgroundColor: "orange",
+                borderColor: "green",
+                ":hover": {
+                  bgcolor: "darkorange",
+                  color: "white",
+                },
+              }}
+            >
               Login
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+                <Link>Dont have an account? Sign Up</Link>
               </Grid>
             </Grid>
           </form>

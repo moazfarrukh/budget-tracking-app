@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { LocalizationProvider, DateField } from "@mui/x-date-pickers";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { filterButtonStyle } from "../styles/filterbydate";
@@ -18,7 +18,8 @@ function FilterByDate() {
   return (
     <Box display="flex" gap="10px">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateField
+        <DatePicker
+          
           label="Filter by Date"
           defaultValue={dayjs(new Date())}
           onChange={handleDateChange}

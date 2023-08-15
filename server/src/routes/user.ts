@@ -11,12 +11,8 @@ userRouter.post("/login", passport.authenticate("local", { session: false }), us
 userRouter.post("/refresh-token", userRefreshToken)
 userRouter.get("/logout", verifyUser, userLogOut)
 
-userRouter.get("/", (req: Request, res: Response) => { res.send("adsfadsf") });
-userRouter.get("/me", verifyUser, (req: Request, res: Response, next: NextFunction) => {
-    res.send(req.user)
-})
 
-userRouter.get("/:id", getUser);
+
 
 
 export default userRouter;

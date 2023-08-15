@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import SignUp from "../pages/SignUp";
 import LogIn from "../pages/LogIn";
 import Budget from "../pages/Budget";
+import BudgetAnalytics from "../pages/BudgetAnalytics";
 
 export const AppRoutes = () => {
   const routes = [
@@ -16,6 +17,10 @@ export const AppRoutes = () => {
     {
       path: "/budget",
       element: <Budget />,
+    },
+    {
+      path: "/analytics",
+      element: <BudgetAnalytics />,
     },
   ];
   return <RouterProvider router={createBrowserRouter(routes)} />;

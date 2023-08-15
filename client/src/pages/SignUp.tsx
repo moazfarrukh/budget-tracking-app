@@ -46,6 +46,9 @@ function SignUp() {
         } else {
           const data = await res.json();
           setUserData({ token: data.token });
+          localStorage.setItem("token", data.token);
+          setUserData({ token: data.token });
+          localStorage.getItem("token");
           navigate("/budget");
         }
       })

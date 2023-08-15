@@ -22,7 +22,7 @@ import filterContext from "../contexts/filterContext";
 import dayjs, { Dayjs } from "dayjs";
 function BudgetTable() {
   const [page, setPage] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const { budgetDataList } = useContext(budgetContext) as budgetContextType;
   const { filterToggle, filterDate } = useContext(
     filterContext

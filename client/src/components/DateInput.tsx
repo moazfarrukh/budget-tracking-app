@@ -2,7 +2,7 @@ import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
-import { DateField } from "@mui/x-date-pickers/DateField";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 interface DateInputProps {
   label: string;
@@ -18,10 +18,9 @@ function DateInput({ label, setDate, defaultValue }: DateInputProps) {
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateField
-        fullWidth
+      <DatePicker
         label={label}
-        sx={{ marginBottom: "15px" }}
+        sx={{ marginBottom: "15px", width: "100%" }}
         defaultValue={
           typeof defaultValue === "undefined" ? dayjs() : defaultValue
         }

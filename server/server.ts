@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // setup cors
-const allowedOrigins = ['*'];
+// const allowedOrigins = ['*'];
 const options: cors.CorsOptions = {
   origin: '*'
 };

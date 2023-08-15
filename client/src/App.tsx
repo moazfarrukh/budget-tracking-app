@@ -1,8 +1,13 @@
 import "./App.css";
 
 import { useState } from "react";
-import { AppRoutes } from "./routes/routes";
 import { IUserData } from "./types/User";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SignUp from "./pages/SignUp";
+import LogIn from "./pages/LogIn";
+import Budget from "./pages/Budget";
+import BudgetAnalytics from "./pages/BudgetAnalytics";
+
 import userContext from "./contexts/userContext";
 import Navbar from "./components/Navbar";
 function App() {
@@ -11,8 +16,15 @@ function App() {
 
   return (
     <userContext.Provider value={value}>
-      <Navbar />
-      <AppRoutes />
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route element={<SignUp />} path="/" />
+          <Route element={<LogIn />} path="/login" />
+          <Route element={<Budget />} path="/budget" />
+          <Route element={<BudgetAnalytics />} path="/analytics" />
+        </Routes>
+      </BrowserRouter>
     </userContext.Provider>
   );
 }

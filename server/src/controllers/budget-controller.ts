@@ -2,6 +2,9 @@ import { Response, Request, NextFunction } from 'express';
 import { ReqUser } from '../types/user';
 import Budget from '../models/budget.model';
 import mongoose, { Schema } from 'mongoose';
+import moment from 'moment';
+
+
 export const budgetGet = (req: Request, res: Response, next: NextFunction) => {
     const reqUser = req.user as ReqUser
     Budget.find({ user: reqUser._id }
@@ -12,6 +15,7 @@ export const budgetGet = (req: Request, res: Response, next: NextFunction) => {
     })
 }
 
+
 export const budgetUpdate = (req: Request, res: Response, next: NextFunction) => {
 
     const update = {
@@ -20,7 +24,6 @@ export const budgetUpdate = (req: Request, res: Response, next: NextFunction) =>
     Budget.findByIdAndUpdate({ _id: new mongoose.Types.ObjectId(req.body.object_id) }, update).then((budget: any) => {
         res.statusCode = 200;
         res.send({ success: true });
-        console.log(budget)
     }).catch((err) => {
         res.statusCode = 400;
         res.send("bad request")
@@ -35,7 +38,6 @@ export const budgetDelete = (req: Request, res: Response, next: NextFunction) =>
     Budget.findByIdAndDelete(req.body.object_id).then((budget: any) => {
         res.statusCode = 204;
         res.send({ success: true });
-        console.log(budget)
     }).catch((err) => {
         res.statusCode = 400;
         res.send("bad request")
@@ -45,6 +47,7 @@ export const budgetDelete = (req: Request, res: Response, next: NextFunction) =>
 
 }
 export const budgetAdd = (req: Request, res: Response, next: NextFunction) => {
+    
     Budget.create(new Budget({ _id: new mongoose.Types.ObjectId(), transaction_name: req.body.transaction_name, transaction_date: new Date(req.body.transaction_date), price: req.body.price })).then((budget: any) => {
         const reqUser = req.user as ReqUser;
         budget.user = reqUser._id;
@@ -64,5 +67,70 @@ export const budgetAdd = (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
     )
+
+}
+
+export const getBudgetAnalytics = async (req: Request, res: Response, next: NextFunction) => {
+    const reqUser = req.user as ReqUser
+    const start_date = new Date();
+    start_date.setDate(start_date.getDate() - 365);
+    const end_date = new Date();
+
+    try {
+        const analytics_data = await Budget.aggregate([{
+            $match: {
+                "user": reqUser._id,
+                "transaction_date": {
+                    "$gte": start_date,
+                    "$lte": end_date,
+                }
+
+            },
+        },
+        {
+
+            $group: {
+                _id: { $dateToString: { format: '%m/%d/%Y', date: '$transaction_date' } },
+                price: { $sum: '$price' },
+            },
+
+        },
+        {
+            $project: {
+                date: '$_id',
+                price: '$price',
+            },
+        },
+        ])
+        // create array that will store default data of all dates
+        const resultData = [];
+        let currentDate = new Date(start_date);
+
+        // populate intial values
+        for (let i = 0; i <= 365; i++) {
+            resultData.push({ date: moment(currentDate).toDate(), price: 0 });
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        // replace intial data with values from database
+        resultData.map((data) => {
+            const found = (analytics_data.find((item) => {
+                return data.date.setHours(0, 0, 0, 0) === moment(item.date).toDate().setHours(0, 0, 0, 0)
+            }))
+
+            if (found) {
+                data.price = found.price;
+            }
+            return { price: data.price, date: data.date.toString() }
+        })
+        res.send({ "analytics": resultData });
+        console.log(resultData);
+
+    } catch (err) {
+        res.statusCode = 500
+        res.send("internal server error")
+        next(err)
+
+    }
 
 }

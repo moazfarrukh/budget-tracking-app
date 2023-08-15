@@ -11,3 +11,9 @@ export function dateToString(date: Date) {
   let dateString = year + '/' + month + '/' + day;
   return dateString;
 }
+export function calculateMinDate(offset: number) {
+  const min_date = new Date();
+  min_date.setDate(min_date.getDate() - offset);
+  console.log(min_date.toString())
+  return min_date.getTime()
+}

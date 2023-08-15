@@ -17,10 +17,9 @@ import BudgetTable from "../components/BudgetTable";
 import EditBudgetModal from "../components/EditBudgetModal";
 import selectedBudgetContext from "../contexts/selectedBudgetContext";
 import filterContext from "../contexts/filterContext";
-import dayjs, { Dayjs } from "dayjs";
 
 function Budget() {
-  const { userData } = useContext(userContext) as userContextType;
+  const { userData, setUserData } = useContext(userContext) as userContextType;
   const [budgetDataList, setBudgetDataList] = useState<BudgetData[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
