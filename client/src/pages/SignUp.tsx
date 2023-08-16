@@ -13,49 +13,44 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NumberInput from "../components/NumberInput";
 import userContext from "../contexts/userContext";
-import { userContextType } from "../types/User";
+import { userContextType, userSignUpInfo } from "../types/User";
 import { Link as NavLink } from "react-router-dom";
+import { UserSignUp } from "../utils/userAuth";
+import { submitButtonStyle } from "../styles/Submit";
+import AlertBar from "../components/AlertBar";
+
 function SignUp() {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [budgetLimit, setBudgetLimit] = useState<number>(0);
-  const { userData, setUserData } = useContext(userContext) as userContextType;
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
-  const formSignUpHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const formSignUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch("http://localhost:8000/user/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-        budget_limit: budgetLimit,
-      }),
-    })
-      .then(async (res: Response) => {
-        if (!res.ok) {
-          console.log(await res.json());
-        } else {
-          const data = await res.json();
-          setUserData({ token: data.token });
-          localStorage.setItem("token", data.token);
-          setUserData({ token: data.token });
-          localStorage.getItem("token");
-          navigate("/budget");
-        }
-      })
-      .catch();
+    const success = await UserSignUp({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+      budgetLimit: budgetLimit,
+    } as userSignUpInfo);
+    if (success) {
+      navigate("/budget");
+    }
   };
   return (
     <div>
+      <AlertBar
+        setOpen={setAlertOpen}
+        open={alertOpen}
+        horizontal="center"
+        text="Error Signing Up"
+        severity={"error"}
+      />
       <Box
         display="flex"
         justifyContent="center"
@@ -106,15 +101,7 @@ function SignUp() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{
-                  height: 40,
-                  backgroundColor: "orange",
-                  borderColor: "green",
-                  ":hover": {
-                    bgcolor: "darkorange",
-                    color: "white",
-                  },
-                }}
+                sx={submitButtonStyle}
               >
                 Sign Up
               </Button>
@@ -122,7 +109,7 @@ function SignUp() {
                 <Grid item>
                   <Link href="#" variant="body2">
                     <NavLink to="/login">
-                      Already have an account? Sign in
+                      Already have an account? Log in
                     </NavLink>
                   </Link>
                 </Grid>
