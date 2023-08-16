@@ -3,13 +3,11 @@ import React, { useContext, useState } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { deleteBudgetData, getBudgetData } from "../utils/budgetFetch";
 import budgetContext from "../contexts/budgetContext";
-import userContext from "../contexts/userContext";
 import {
   BudgetData,
   SelectedBudgetContextType,
   budgetContextType,
 } from "../types/Budget";
-import { userContextType } from "../types/User";
 import selectedBudgetContext from "../contexts/selectedBudgetContext";
 
 interface ActionButtonProps {
@@ -17,7 +15,6 @@ interface ActionButtonProps {
 }
 
 function ActionButton({ object_id }: ActionButtonProps) {
-  const { userData } = useContext(userContext) as userContextType;
   const { setSelectedBudget, setEditOpen } = useContext(
     selectedBudgetContext
   ) as SelectedBudgetContextType;

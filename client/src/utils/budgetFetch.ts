@@ -1,5 +1,3 @@
-import userContext from "../contexts/userContext";
-import { IUserData } from "../types/User";
 import { BudgetData } from "../types/Budget";
 
 type SetBudgetHandler = (BudgetDataList: [BudgetData]) => void;
@@ -7,7 +5,6 @@ const isBroken = async () => {
     return false;
 }
 export const getBudgetData = async (
-    userData: IUserData,
     setBudgetDataList: SetBudgetHandler
 ): Promise<boolean> => {
     try {
@@ -32,7 +29,7 @@ export const getBudgetData = async (
             ;
     }
 };
-export const deleteBudgetData = async (userData: IUserData, object_id: string): Promise<boolean> => {
+export const deleteBudgetData = async (object_id: string): Promise<boolean> => {
     try {
         const response = await fetch("http://localhost:8000/budget", {
             method: "DELETE",
@@ -58,7 +55,6 @@ export const deleteBudgetData = async (userData: IUserData, object_id: string): 
 }
 
 export const postBudgetData = async (
-    userData: IUserData,
     budgetData: BudgetData
 ): Promise<boolean> => {
     try {
@@ -88,7 +84,6 @@ export const postBudgetData = async (
 
 
 export const updateBudgetData = async (
-    userData: IUserData,
     budgetData: BudgetData
 ): Promise<boolean> => {
     try {

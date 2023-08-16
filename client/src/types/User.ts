@@ -12,10 +12,3 @@ export interface userLoginInfo {
     password: string;
 }
 
-export interface IUserData {
-    authenticated: boolean
-}
-export type userContextType = {
-    userData: IUserData,
-    setUserData: (userData: IUserData) => void
-}

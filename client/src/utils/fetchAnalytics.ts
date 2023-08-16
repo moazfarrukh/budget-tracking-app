@@ -1,14 +1,11 @@
-import { IUserData } from "../types/User";
-import { BudgetData, budgetAnalytics } from "../types/Budget";
-
-import BudgetAnalytics from "../pages/BudgetAnalytics";
+import { budgetAnalytics } from "../types/Budget";
 
 const isBroken = async () => {
     return false;
 }
 
 export const getAnalytics = async (
-    userData: IUserData, setBudgetAnalytics: (value: budgetAnalytics[]) => void): Promise<boolean> => {
+    setBudgetAnalytics: (value: budgetAnalytics[]) => void): Promise<boolean> => {
     try {
         const response = await fetch("http://localhost:8000/budget/analytics", {
             headers: {

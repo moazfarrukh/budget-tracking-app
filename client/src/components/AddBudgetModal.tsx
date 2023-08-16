@@ -13,8 +13,6 @@ import NumberInput from "./NumberInput";
 import DateInput from "./DateInput";
 import dayjs, { Dayjs } from "dayjs";
 import { getBudgetData, postBudgetData } from "../utils/budgetFetch";
-import userContext from "../contexts/userContext";
-import { userContextType } from "../types/User";
 import { BudgetData, budgetContextType } from "../types/Budget";
 import budgetContext from "../contexts/budgetContext";
 import { DividerStyle, BudgetModalStyle } from "../styles/BudgetModal";
@@ -31,7 +29,6 @@ function AddBudgetModal({ open, setOpen }: BudgetModalProps) {
 
   // stores the current time by default
   const [tDate, setTDate] = useState<Date>(new Date());
-  const { userData } = useContext(userContext) as userContextType;
   const { setBudgetDataList } = useContext(budgetContext) as budgetContextType;
 
   const handleClose = () => {
@@ -40,7 +37,7 @@ function AddBudgetModal({ open, setOpen }: BudgetModalProps) {
 
   const handlebudgetSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const success = await postBudgetData(userData, {
+    const success = await postBudgetData({
       transaction_name: tName,
       transaction_date: tDate?.toString(),
       price: price,
@@ -48,7 +45,7 @@ function AddBudgetModal({ open, setOpen }: BudgetModalProps) {
 
     if (success) {
       handleClose();
-      getBudgetData(userData, setBudgetDataList);
+      getBudgetData(setBudgetDataList);
     } else {
     }
   };

@@ -8,12 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import TextInput from "../components/TextInput";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import NumberInput from "../components/NumberInput";
-import userContext from "../contexts/userContext";
-import { userContextType, userSignUpInfo } from "../types/User";
+import { userSignUpInfo } from "../types/User";
 import { Link as NavLink } from "react-router-dom";
 import { UserSignUp } from "../utils/userAuth";
 import { submitButtonStyle } from "../styles/Submit";

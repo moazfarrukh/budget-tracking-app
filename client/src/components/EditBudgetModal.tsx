@@ -11,10 +11,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import TextInput from "./TextInput";
 import NumberInput from "./NumberInput";
 import DateInput from "./DateInput";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { getBudgetData, updateBudgetData } from "../utils/budgetFetch";
-import userContext from "../contexts/userContext";
-import { userContextType } from "../types/User";
 import {
   BudgetData,
   SelectedBudgetContextType,
@@ -39,7 +37,6 @@ function EditBudgetModal({ open, setOpen }: BudgetModalProps) {
   const [price, setPrice] = useState<number>();
   // stores the current time by default
   const [tDate, setTDate] = useState<Date>(new Date());
-  const { userData } = useContext(userContext) as userContextType;
   const { setBudgetDataList } = useContext(budgetContext) as budgetContextType;
 
   useEffect(() => {
@@ -54,7 +51,7 @@ function EditBudgetModal({ open, setOpen }: BudgetModalProps) {
 
   const handlebudgetUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const success = await updateBudgetData(userData, {
+    const success = await updateBudgetData({
       _id: selectedBudget._id,
       transaction_name: tName,
       transaction_date: tDate?.toString(),
@@ -63,7 +60,7 @@ function EditBudgetModal({ open, setOpen }: BudgetModalProps) {
 
     if (success) {
       handleClose();
-      getBudgetData(userData, setBudgetDataList);
+      getBudgetData(setBudgetDataList);
     } else {
     }
   };

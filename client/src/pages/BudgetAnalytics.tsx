@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Box, Tabs, Tab, Typography } from "@mui/material";
 import "chartjs-adapter-date-fns";
 import { enUS } from "date-fns/locale";
@@ -18,12 +18,11 @@ import { ThemeProvider } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import { analyticsTheme } from "../styles/BudgetAnalytics";
 import { getAnalytics } from "../utils/fetchAnalytics";
-import userContext from "../contexts/userContext";
-import { userContextType } from "../types/User";
 import { budgetAnalytics } from "../types/Budget";
 import { calculateMinDate } from "../utils/dateFormat";
 import { useNavigate } from "react-router-dom";
 function BudgetAnalytics() {
+  // registering chartjs plugins
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -34,23 +33,22 @@ function BudgetAnalytics() {
     Tooltip,
     Legend
   );
-  const { userData } = useContext(userContext) as userContextType;
 
   const [budgetAnalytics, setBudgetAnalytics] = useState<budgetAnalytics[]>([]);
   const [dateOffset, setDateOffset] = useState<number>(30);
+  const [value, setValue] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     }
-    getAnalytics(userData, setBudgetAnalytics);
-  }, [setBudgetAnalytics, navigate, userData]);
+    getAnalytics(setBudgetAnalytics);
+  }, [setBudgetAnalytics, navigate]);
 
   const options: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,
-
     plugins: {
       legend: {
         display: false,
@@ -91,19 +89,18 @@ function BudgetAnalytics() {
       },
     ],
   };
-  const [value, setValue] = useState<number>(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     switch (newValue) {
-      case 1: {
+      case 0: {
         setDateOffset(30);
         break;
       }
-      case 2: {
+      case 1: {
         setDateOffset(183);
         break;
       }
-      case 3: {
+      case 2: {
         setDateOffset(365);
         break;
       }
@@ -138,9 +135,9 @@ function BudgetAnalytics() {
             textColor="secondary"
             TabIndicatorProps={{ style: { background: "black" } }}
           >
-            <Tab value={1} label="Last Month" />
-            <Tab value={2} label="Last 6 Months" />
-            <Tab value={3} label="Last 12 months" />
+            <Tab value={0} label="Last Month" />
+            <Tab value={1} label="Last 6 Months" />
+            <Tab value={2} label="Last 12 months" />
           </Tabs>
           <Line options={options} data={data} />
         </Card>

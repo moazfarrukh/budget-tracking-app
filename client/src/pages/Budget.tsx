@@ -1,6 +1,4 @@
-import userContext from "../contexts/userContext";
-import { userContextType } from "../types/User";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Card, Button } from "@mui/material";
 import {
   BudgetData,
@@ -20,12 +18,12 @@ import filterContext from "../contexts/filterContext";
 import { useNavigate } from "react-router-dom";
 
 function Budget() {
-  const { userData, setUserData } = useContext(userContext) as userContextType;
   const [budgetDataList, setBudgetDataList] = useState<BudgetData[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [filterDate, setFilterDate] = useState<Date>(new Date());
   const [filterToggle, setFilterToggle] = useState<boolean>(false);
+
   const intialBudgetData: BudgetData = {
     user: "",
     transaction_name: "",
@@ -58,8 +56,8 @@ function Budget() {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     }
-    getBudgetData(userData, setBudgetDataList);
-  }, [setBudgetDataList, userData, navigate]);
+    getBudgetData(setBudgetDataList);
+  }, [setBudgetDataList, navigate]);
 
   const handleOpen = () => {
     setOpen(true);

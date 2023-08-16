@@ -47,7 +47,7 @@ export const budgetDelete = (req: Request, res: Response, next: NextFunction) =>
 
 }
 export const budgetAdd = (req: Request, res: Response, next: NextFunction) => {
-    
+
     Budget.create(new Budget({ _id: new mongoose.Types.ObjectId(), transaction_name: req.body.transaction_name, transaction_date: new Date(req.body.transaction_date), price: req.body.price })).then((budget: any) => {
         const reqUser = req.user as ReqUser;
         budget.user = reqUser._id;
@@ -133,4 +133,43 @@ export const getBudgetAnalytics = async (req: Request, res: Response, next: Next
 
     }
 
+}
+export const getBudgetLimitState = async (req: Request, res: Response, next: NextFunction) => {
+
+    const reqUser = req.user as ReqUser
+    const start_date = new Date();
+    start_date.setDate(start_date.getDate() - 30);
+    const end_date = new Date();
+
+    try {
+        const totalMonthlyBudget = await Budget.aggregate([{
+            $match: {
+                "user": reqUser._id,
+                "transaction_date": {
+                    "$gte": start_date,
+                    "$lte": end_date,
+                }
+
+            },
+        },
+        {
+
+            $group: {
+                _id: "$user",
+                price: { $sum: '$price' },
+            },
+
+        },
+        {
+            $project: {
+                price: '$price',
+            },
+        },
+        ])
+        res.send({ "analytics": totalMonthlyBudget });
+    } catch (err) {
+        res.statusCode = 500
+        res.send("internal server error")
+        next(err)
+    }
 }
