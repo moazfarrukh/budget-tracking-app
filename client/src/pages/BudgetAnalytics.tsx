@@ -19,9 +19,10 @@ import { Line } from "react-chartjs-2";
 import { analyticsTheme } from "../styles/BudgetAnalytics";
 import { getAnalytics } from "../utils/fetchAnalytics";
 import userContext from "../contexts/userContext";
-import { IUserData, userContextType } from "../types/User";
+import { userContextType } from "../types/User";
 import { budgetAnalytics } from "../types/Budget";
 import { calculateMinDate } from "../utils/dateFormat";
+import { useNavigate } from "react-router-dom";
 function BudgetAnalytics() {
   ChartJS.register(
     CategoryScale,
@@ -37,10 +38,14 @@ function BudgetAnalytics() {
 
   const [budgetAnalytics, setBudgetAnalytics] = useState<budgetAnalytics[]>([]);
   const [dateOffset, setDateOffset] = useState<number>(30);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
     getAnalytics(userData, setBudgetAnalytics);
-  }, [userData, setBudgetAnalytics]);
+  }, [setBudgetAnalytics, navigate, userData]);
 
   const options: ChartOptions<"line"> = {
     responsive: true,

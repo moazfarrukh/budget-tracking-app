@@ -11,7 +11,7 @@ import BudgetAnalytics from "./pages/BudgetAnalytics";
 import userContext from "./contexts/userContext";
 import Navbar from "./components/Navbar";
 function App() {
-  const [userData, setUserData] = useState<IUserData>({ token: "" });
+  const [userData, setUserData] = useState<IUserData>({ authenticated: false });
   const value = { userData, setUserData };
 
   return (
@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route element={<SignUp />} path="/" />
+          <Route element={<SignUp />} path="/signup" />
           <Route element={<LogIn />} path="/login" />
           <Route element={<Budget />} path="/budget" />
           <Route element={<BudgetAnalytics />} path="/analytics" />

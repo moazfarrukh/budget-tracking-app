@@ -17,6 +17,7 @@ import BudgetTable from "../components/BudgetTable";
 import EditBudgetModal from "../components/EditBudgetModal";
 import selectedBudgetContext from "../contexts/selectedBudgetContext";
 import filterContext from "../contexts/filterContext";
+import { useNavigate } from "react-router-dom";
 
 function Budget() {
   const { userData, setUserData } = useContext(userContext) as userContextType;
@@ -51,10 +52,14 @@ function Budget() {
     filterToggle,
     setFilterToggle,
   };
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
     getBudgetData(userData, setBudgetDataList);
-  }, [setBudgetDataList, userData]);
+  }, [setBudgetDataList, userData, navigate]);
 
   const handleOpen = () => {
     setOpen(true);
