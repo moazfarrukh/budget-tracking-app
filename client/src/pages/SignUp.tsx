@@ -7,16 +7,20 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import TextInput from "../components/TextInput";
-import { useState } from "react";
-
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NumberInput from "../components/NumberInput";
-import { userSignUpInfo } from "../types/User";
 import { Link as NavLink } from "react-router-dom";
-import { UserSignUp } from "../utils/userAuth";
-import { submitButtonStyle } from "../styles/Submit";
-import AlertBar from "../components/AlertBar";
+
+import {
+  authenticatedContext,
+  AlertBar,
+  UserSignUp,
+  authenticatedContextType,
+  userSignUpInfo,
+  submitButtonStyle,
+  TextInput,
+} from "../index";
 
 function SignUp() {
   const [firstName, setFirstName] = useState<string>("");
@@ -25,11 +29,25 @@ function SignUp() {
   const [password, setPassword] = useState<string>("");
   const [budgetLimit, setBudgetLimit] = useState<number>(0);
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [signUpSubmitted, SetSignUpSubmitted] = useState<boolean>(false);
+
+  const { setAuthenticated } = useContext(
+    authenticatedContext
+  ) as authenticatedContextType;
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      setAuthenticated(false);
+    } else {
+      setAuthenticated(true);
+    }
+  }, [setAuthenticated]);
+
   const formSignUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    SetSignUpSubmitted(true);
     const success = await UserSignUp({
       firstName: firstName,
       lastName: lastName,
@@ -38,6 +56,7 @@ function SignUp() {
       budgetLimit: budgetLimit,
     } as userSignUpInfo);
     if (success) {
+      setAuthenticated(true);
       navigate("/budget");
     }
   };
@@ -74,22 +93,30 @@ function SignUp() {
                 label="First Name"
                 name="firstName"
                 setFieldState={setFirstName}
+                field={firstName}
+                submitted={signUpSubmitted}
               />
               <TextInput
                 label="Last Name"
                 name="lastName"
                 setFieldState={setLastName}
+                field={lastName}
+                submitted={signUpSubmitted}
               />
               <TextInput
                 label="Email Address"
                 name="email"
                 setFieldState={setEmail}
+                submitted={signUpSubmitted}
+                field={email}
               />
               <TextInput
                 label="Password"
                 name="password"
                 type="password"
                 setFieldState={setPassword}
+                submitted={signUpSubmitted}
+                field={password}
               />
               <NumberInput
                 label="Budget Limit"

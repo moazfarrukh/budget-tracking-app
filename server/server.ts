@@ -28,10 +28,10 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // setup cors
-// const allowedOrigins = ['*'];
 const options: cors.CorsOptions = {
   origin: '*'
 };
+
 app.use(cors(options));
 app.use(cookieParser(process.env.COOKIE_SECRET as string))
 
@@ -41,7 +41,7 @@ app.use(passport.initialize())
 app.use("/user", userRouter);
 app.use("/budget",budgetRouter)
 
-// add list to por
+// listen to port
 app.listen(port, () => {
   console.log(`server running at http://localhost:${port}`);
 });

@@ -1,6 +1,14 @@
 import { BudgetData } from "../types/Budget";
+import { useState, useEffect } from "react";
 
 type SetBudgetHandler = (BudgetDataList: [BudgetData]) => void;
+
+
+interface BudgetStatus {
+    budgetExceeded: boolean,
+}
+
+
 const isBroken = async () => {
     return false;
 }
@@ -20,13 +28,11 @@ export const getBudgetData = async (
             return true;
         } else {
             console.log("error");
-            return await isBroken()
-                ;
+            return await isBroken();
         }
     }
     catch (err) {
-        return await isBroken()
-            ;
+        return await isBroken();
     }
 };
 export const deleteBudgetData = async (object_id: string): Promise<boolean> => {
@@ -44,13 +50,11 @@ export const deleteBudgetData = async (object_id: string): Promise<boolean> => {
             return true;
         } else {
             console.log("error");
-            return await isBroken()
-                ;
+            return await isBroken();
         }
     }
     catch (err) {
-        return await isBroken()
-            ;
+        return await isBroken();
     }
 }
 
@@ -73,12 +77,10 @@ export const postBudgetData = async (
             return true;
         } else {
             console.log("error");
-            return await isBroken()
-                ;
+            return await isBroken();
         }
     } catch (error) {
-        return await isBroken()
-            ;
+        return await isBroken();
     }
 };
 
@@ -100,11 +102,37 @@ export const updateBudgetData = async (
             return true;
         } else {
             console.log("error");
-            return await isBroken()
-                ;
+            return await isBroken();
         }
     } catch (error) {
-        return await isBroken()
-            ;
+        return await isBroken();
     }
 };
+
+
+export const useBudgetLimitFetch = () => {
+    const [budgetStatus, setBudgetStatus] = useState<boolean>(false);
+
+    const fetchBudgetLimit = async (): Promise<void> => {
+        try {
+            const response = await fetch("http://localhost:8000/budget/limit", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            if (response.ok) {
+                const data: BudgetStatus = await response.json();
+                setBudgetStatus(data.budgetExceeded);
+            }
+
+        } catch (err) {
+
+        }
+    }
+
+    useEffect(() => {
+        fetchBudgetLimit()
+    }, [])
+    return { budgetStatus, setBudgetStatus };
+}

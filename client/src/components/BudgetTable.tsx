@@ -8,18 +8,20 @@ import {
   TablePagination,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { TableStyle } from "../styles/Budget";
+
 import {
+  TableStyle,
   BudgetColumn,
   BudgetData,
   budgetContextType,
   filterContextType,
-} from "../types/Budget";
-import { convertDateFormat, dateToString } from "../utils/dateFormat";
-import budgetContext from "../contexts/budgetContext";
-import ActionButton from "./ActionButton";
-import filterContext from "../contexts/filterContext";
-import dayjs, { Dayjs } from "dayjs";
+  filterContext,
+  ActionButton,
+  budgetContext,
+  convertDateFormat,
+  dateToString,
+} from "../index";
+
 function BudgetTable() {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);

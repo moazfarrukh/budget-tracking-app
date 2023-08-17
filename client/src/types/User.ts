@@ -12,3 +12,8 @@ export interface userLoginInfo {
     password: string;
 }
 
+
+export interface authenticatedContextType {
+    authenticated: boolean;
+    setAuthenticated: (value: boolean) => void
+}

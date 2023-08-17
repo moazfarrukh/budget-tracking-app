@@ -2,14 +2,18 @@ import { Box, Button } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
-import { filterButtonStyle } from "../styles/filterbydate";
 import { useContext } from "react";
-import filterContext from "../contexts/filterContext";
-import { filterContextType } from "../types/Budget";
+
+import {
+  filterButtonStyle,
+  filterContext,
+  filterContextType,
+} from "../index";
 
 function FilterByDate() {
-  const { filterDate, filterToggle, setFilterToggle, setFilterDate } =
-    useContext(filterContext) as filterContextType;
+  const { filterToggle, setFilterToggle, setFilterDate } = useContext(
+    filterContext
+  ) as filterContextType;
   const handleDateChange = (TValue: Dayjs | null) => {
     if (TValue !== null) {
       setFilterDate(TValue.toDate());
@@ -19,7 +23,6 @@ function FilterByDate() {
     <Box display="flex" gap="10px">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          
           label="Filter by Date"
           defaultValue={dayjs(new Date())}
           onChange={handleDateChange}

@@ -8,21 +8,23 @@ import {
   Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import TextInput from "./TextInput";
-import NumberInput from "./NumberInput";
-import DateInput from "./DateInput";
 import dayjs from "dayjs";
-import { getBudgetData, updateBudgetData } from "../utils/budgetFetch";
+
 import {
+  addButtonStyle,
+  DividerStyle,
   BudgetData,
   SelectedBudgetContextType,
   budgetContextType,
-} from "../types/Budget";
-import budgetContext from "../contexts/budgetContext";
-import { DividerStyle, BudgetModalStyle } from "../styles/BudgetModal";
-import { addButtonStyle } from "../styles/Budget";
-import selectedBudgetContext from "../contexts/selectedBudgetContext";
-
+  BudgetModalStyle,
+  TextInput,
+  budgetContext,
+  DateInput,
+  NumberInput,
+  getBudgetData,
+  updateBudgetData,
+  selectedBudgetContext,
+} from "../index";
 interface BudgetModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -81,6 +83,7 @@ function EditBudgetModal({ open, setOpen }: BudgetModalProps) {
             name="name"
             defaultValue={selectedBudget.transaction_name}
             setFieldState={setTName}
+            field={tName}
           />
           <NumberInput
             label="Price"

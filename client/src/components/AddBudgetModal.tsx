@@ -8,16 +8,19 @@ import {
   Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import TextInput from "./TextInput";
-import NumberInput from "./NumberInput";
-import DateInput from "./DateInput";
-import dayjs, { Dayjs } from "dayjs";
-import { getBudgetData, postBudgetData } from "../utils/budgetFetch";
-import { BudgetData, budgetContextType } from "../types/Budget";
-import budgetContext from "../contexts/budgetContext";
-import { DividerStyle, BudgetModalStyle } from "../styles/BudgetModal";
-import { addButtonStyle } from "../styles/Budget";
-
+import {
+  addButtonStyle,
+  DividerStyle,
+  BudgetData,
+  budgetContextType,
+  BudgetModalStyle,
+  budgetContext,
+  TextInput,
+  DateInput,
+  NumberInput,
+  getBudgetData,
+  postBudgetData,
+} from "../index";
 interface BudgetModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -61,7 +64,12 @@ function AddBudgetModal({ open, setOpen }: BudgetModalProps) {
             </IconButton>
           </Box>
           <Divider style={DividerStyle} />
-          <TextInput label="Name" name="name" setFieldState={setTName} />
+          <TextInput
+            label="Name"
+            name="name"
+            setFieldState={setTName}
+            field={tName}
+          />
           <NumberInput label="Price" name="price" setFieldState={setPrice} />
           <DateInput label="Date" setDate={setTDate} />
           <form onSubmit={handlebudgetSubmit} noValidate>

@@ -1,10 +1,10 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Snackbar, Alert, AlertColor, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 interface AlertBarProps {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   text: string;
   severity?: AlertColor;
   vertical?: "top" | "bottom";

@@ -3,6 +3,8 @@ import { ReqUser } from '../types/user';
 import Budget from '../models/budget.model';
 import mongoose, { Schema } from 'mongoose';
 import moment from 'moment';
+import userModel from "../models/user.model";
+
 
 
 export const budgetGet = (req: Request, res: Response, next: NextFunction) => {
@@ -124,7 +126,6 @@ export const getBudgetAnalytics = async (req: Request, res: Response, next: Next
             return { price: data.price, date: data.date.toString() }
         })
         res.send({ "analytics": resultData });
-        console.log(resultData);
 
     } catch (err) {
         res.statusCode = 500
@@ -166,10 +167,27 @@ export const getBudgetLimitState = async (req: Request, res: Response, next: Nex
             },
         },
         ])
-        res.send({ "analytics": totalMonthlyBudget });
+        const userInfo = await userModel.findById(reqUser._id)
+        const userBudgetLimit = userInfo?.get("budget_limit");
+        if (typeof userBudgetLimit === "number") {
+            if (userBudgetLimit < totalMonthlyBudget[0].price) {
+                res.send({ "budgetExceeded": true })
+
+            }
+            else {
+                res.send({ "budgetExceeded": false })
+
+            }
+        }
+        else {
+            res.statusCode = 401;
+            res.send("unauthorized");
+        }
     } catch (err) {
         res.statusCode = 500
         res.send("internal server error")
         next(err)
     }
 }
+
+

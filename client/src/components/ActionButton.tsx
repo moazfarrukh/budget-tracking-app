@@ -1,14 +1,16 @@
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import React, { useContext, useState } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { deleteBudgetData, getBudgetData } from "../utils/budgetFetch";
-import budgetContext from "../contexts/budgetContext";
+
 import {
   BudgetData,
   SelectedBudgetContextType,
   budgetContextType,
-} from "../types/Budget";
-import selectedBudgetContext from "../contexts/selectedBudgetContext";
+  selectedBudgetContext,
+  budgetContext,
+  deleteBudgetData,
+  getBudgetData,
+} from "../index";
 
 interface ActionButtonProps {
   object_id: string;
@@ -44,9 +46,9 @@ function ActionButton({ object_id }: ActionButtonProps) {
   };
   const handleDelete = async () => {
     handleClose();
-    const success = await deleteBudgetData(userData, object_id);
+    const success = await deleteBudgetData(object_id);
     if (success) {
-      getBudgetData(userData, setBudgetDataList);
+      getBudgetData(setBudgetDataList);
     } else {
     }
   };

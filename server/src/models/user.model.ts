@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import passportLocalMongoose from 'passport-local-mongoose';
-import {ISession,IUser} from '../types/user'
+import { ISession, IUser } from '../types/user'
 
 const sessionSchema = new Schema<ISession>({
   refreshToken: {
@@ -24,7 +24,7 @@ const userSchema = new Schema<IUser>({
   ,
   refreshToken: {
     type: [sessionSchema],
-    default:[]
+    default: []
   },
 });
 
@@ -36,7 +36,7 @@ userSchema.set("toJSON", {
 });
 
 
-userSchema.plugin(passportLocalMongoose,{ usernameField : 'email' })
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' })
 
 
 

@@ -1,81 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Card, Box, Tabs, Tab, Typography } from "@mui/material";
 import "chartjs-adapter-date-fns";
-import { enUS } from "date-fns/locale";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartOptions,
-  TimeScale,
-} from "chart.js";
 import { ThemeProvider } from "@mui/material";
 import { Line } from "react-chartjs-2";
-import { analyticsTheme } from "../styles/BudgetAnalytics";
-import { getAnalytics } from "../utils/fetchAnalytics";
-import { budgetAnalytics } from "../types/Budget";
-import { calculateMinDate } from "../utils/dateFormat";
 import { useNavigate } from "react-router-dom";
+
+import {
+  setupChartjs,
+  authenticatedContextType,
+  authenticatedContext,
+  budgetAnalytics,
+  getAnalytics,
+  analyticsTheme,
+} from "../index";
+
 function BudgetAnalytics() {
   // registering chartjs plugins
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    TimeScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-  );
 
   const [budgetAnalytics, setBudgetAnalytics] = useState<budgetAnalytics[]>([]);
   const [dateOffset, setDateOffset] = useState<number>(30);
   const [value, setValue] = useState<number>(0);
+  const { setAuthenticated } = useContext(
+    authenticatedContext
+  ) as authenticatedContextType;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
+      setAuthenticated(false);
+    } else {
+      setAuthenticated(true);
+      getAnalytics(setBudgetAnalytics);
     }
-    getAnalytics(setBudgetAnalytics);
-  }, [setBudgetAnalytics, navigate]);
-
-  const options: ChartOptions<"line"> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: true,
-        text: "Budget Trends",
-        align: "start" as "start",
-        padding: 30,
-      },
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false,
-        },
-        type: "time",
-        adapters: {
-          date: {
-            locale: enUS,
-          },
-        },
-        max: new Date().getTime(),
-        min: calculateMinDate(dateOffset),
-      },
-    },
-  };
+  }, [setBudgetAnalytics, setAuthenticated, navigate]);
 
   const data = {
     label: "Date",
@@ -89,6 +47,7 @@ function BudgetAnalytics() {
       },
     ],
   };
+  const options = setupChartjs(dateOffset);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     switch (newValue) {

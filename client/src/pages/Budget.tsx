@@ -1,21 +1,25 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Card, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 import {
   BudgetData,
   SelectedBudgetContextType,
   budgetContextType,
-} from "../types/Budget";
-
-import AddBudgetModal from "../components/AddBudgetModal";
-import { getBudgetData } from "../utils/budgetFetch";
-import budgetContext from "../contexts/budgetContext";
-import FilterByDate from "../components/FilterByDate";
-import { addButtonStyle } from "../styles/Budget";
-import BudgetTable from "../components/BudgetTable";
-import EditBudgetModal from "../components/EditBudgetModal";
-import selectedBudgetContext from "../contexts/selectedBudgetContext";
-import filterContext from "../contexts/filterContext";
-import { useNavigate } from "react-router-dom";
+  AddBudgetModal,
+  getBudgetData,
+  useBudgetLimitFetch,
+  budgetContext,
+  FilterByDate,
+  addButtonStyle,
+  BudgetTable,
+  EditBudgetModal,
+  filterContext,
+  AlertBar,
+  authenticatedContext,
+  authenticatedContextType,
+  selectedBudgetContext,
+} from "../index";
 
 function Budget() {
   const [budgetDataList, setBudgetDataList] = useState<BudgetData[]>([]);
@@ -23,7 +27,9 @@ function Budget() {
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [filterDate, setFilterDate] = useState<Date>(new Date());
   const [filterToggle, setFilterToggle] = useState<boolean>(false);
-
+  const { setAuthenticated } = useContext(
+    authenticatedContext
+  ) as authenticatedContextType;
   const intialBudgetData: BudgetData = {
     user: "",
     transaction_name: "",
@@ -50,14 +56,20 @@ function Budget() {
     filterToggle,
     setFilterToggle,
   };
+
   const navigate = useNavigate();
+
+  const { budgetStatus, setBudgetStatus } = useBudgetLimitFetch();
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
+      setAuthenticated(false);
+    } else {
+      setAuthenticated(true);
+      getBudgetData(setBudgetDataList);
     }
-    getBudgetData(setBudgetDataList);
-  }, [setBudgetDataList, navigate]);
+  }, [setBudgetDataList, setAuthenticated, navigate]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -67,6 +79,12 @@ function Budget() {
     <budgetContext.Provider value={budgetDataListValue}>
       <selectedBudgetContext.Provider value={selectedBudgetValue}>
         <filterContext.Provider value={filterValue}>
+          <AlertBar
+            open={budgetStatus}
+            setOpen={setBudgetStatus}
+            text="Budget Limit for this month exceeded"
+            severity="warning"
+          />
           <Box
             minHeight="100vh"
             width="100%"
@@ -89,7 +107,7 @@ function Budget() {
               <BudgetTable />
             </Card>
           </Box>
-        </filterContext.Provider>{" "}
+        </filterContext.Provider>
       </selectedBudgetContext.Provider>
     </budgetContext.Provider>
   );

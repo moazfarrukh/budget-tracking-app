@@ -1,14 +1,23 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import Button from "@mui/material/Button";
-import { Link as Navlink, useNavigate } from "react-router-dom";
-import Link from "@mui/material/Link";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import {
+  authenticatedContextType,
+  Logout,
+  authenticatedContext,
+} from "../index";
+
 function Navbar() {
   const navigate = useNavigate();
+
+  const { authenticated } = useContext(
+    authenticatedContext
+  ) as authenticatedContextType;
+
   return (
     <AppBar position="static" sx={{ backgroundColor: "#4d4d4d" }}>
       <Toolbar>
@@ -30,13 +39,21 @@ function Navbar() {
             }}
             sx={{ my: 2, color: "white", display: "block" }}
           >
-            Analytics{" "}
+            Analytics
           </Button>
         </Box>
-
-        <IconButton size="large" color="inherit">
-          <AccountCircle />
-        </IconButton>
+        {authenticated ? (
+          <Logout />
+        ) : (
+          <Button
+            onClick={() => {
+              navigate("/login");
+            }}
+            sx={{ my: 2, color: "white", display: "block" }}
+          >
+            Login
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );

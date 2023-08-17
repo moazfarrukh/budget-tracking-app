@@ -5,9 +5,13 @@ interface TextInputProps {
   name: string;
   label: string;
   setFieldState: (value: string) => void;
+  field: string;
   type?: string;
   required?: boolean;
   defaultValue?: string;
+  error?: boolean;
+  errorText?: string;
+  submitted?: boolean;
 }
 
 function TextInput({
@@ -17,6 +21,10 @@ function TextInput({
   required,
   setFieldState,
   defaultValue,
+  error,
+  errorText,
+  field,
+  submitted,
 }: TextInputProps) {
   return (
     <Grid
@@ -28,6 +36,8 @@ function TextInput({
       <TextField
         variant="outlined"
         required={required}
+        error={typeof error == "undefined" ? false : field === "" && submitted}
+        helperText={field === "" && submitted ? errorText : ""}
         fullWidth
         label={label}
         name={name}

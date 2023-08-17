@@ -7,29 +7,47 @@ import {
   Card,
   Typography,
 } from "@mui/material";
-import TextInput from "../components/TextInput";
-import { useState } from "react";
-import { userLoginInfo } from "../types/User";
-import { useNavigate } from "react-router-dom";
-import { userLogin } from "../utils/userAuth";
-import { submitButtonStyle } from "../styles/Submit";
-import { Link as NavLink } from "react-router-dom";
-import AlertBar from "../components/AlertBar";
+import { useContext, useEffect, useState } from "react";
+import { Link as NavLink, useNavigate } from "react-router-dom";
+
+import {
+  authenticatedContext,
+  authenticatedContextType,
+  userLoginInfo,
+  userLogin,
+  submitButtonStyle,
+  TextInput,
+  AlertBar,
+} from "../index";
 
 function LogIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [loginSubmitted, setLoginSubmitted] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const { setAuthenticated } = useContext(
+    authenticatedContext
+  ) as authenticatedContextType;
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      setAuthenticated(false);
+    } else {
+      setAuthenticated(true);
+    }
+  });
 
   const formLoginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoginSubmitted(true);
     const success = await userLogin({
       email: email,
       password: password,
     } as userLoginInfo);
 
     if (success) {
+      setAuthenticated(true);
       navigate("/budget");
     } else {
       setAlertOpen(true);
@@ -68,12 +86,20 @@ function LogIn() {
                 label="Email Address"
                 name="email"
                 setFieldState={setEmail}
+                field={email}
+                error={true}
+                errorText="Enter your email"
+                submitted={loginSubmitted}
               />
               <TextInput
                 label="Password"
                 name="password"
                 type="password"
                 setFieldState={setPassword}
+                field={password}
+                error={true}
+                errorText="Enter your password"
+                submitted={loginSubmitted}
               />
               <Button
                 type="submit"

@@ -1,14 +1,5 @@
 import mongoose, { Schema } from "mongoose"
-
-interface IBudget {
-    _id: Schema.Types.ObjectId,
-    transaction_name: string,
-    transaction_date: Date,
-    price: number
-    user: Schema.Types.ObjectId
-
-}
-
+import { IBudget, IBudgetDoc } from "../types/budget";
 const budgetSchema = new Schema<IBudget>({
     _id: Schema.Types.ObjectId,
     transaction_name: {
@@ -30,5 +21,5 @@ const budgetSchema = new Schema<IBudget>({
 })
 
 
-const Budget = mongoose.model("Budget", budgetSchema);
+const Budget = mongoose.model<IBudgetDoc>("Budget", budgetSchema);
 export default Budget;
